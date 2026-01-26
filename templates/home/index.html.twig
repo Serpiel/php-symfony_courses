@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+</style>
+<nav class="pages">
+    <a href={{path(name='app_home')}}>Home</a> 
+    <a href={{path(name='app_about')}}>About</a>
+    <a href={{path(name='app_contact')}}>Contact</a>
+</nav>
+
+<div class="example-wrapper">
+    <h1>Welcome on my Page</h1>
+
+    I have multiple passions like:
+    <ul>
+        <code>Video games</code><br>
+        <code>Music</code><br>
+        <code>Programming</code><br>
+        <code>Design</code>
+    </ul>
+</div>
+
+{% endblock %}
