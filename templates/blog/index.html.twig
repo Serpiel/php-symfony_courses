@@ -3,10 +3,58 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
+<div class="container"> <div class="example-wrapper">
+        <h1>Serpiel's blog</h1>
 
-<div class="example-wrapper">
-    <h1>What about me</h1>
-    <p>5'8 feet tall, ladyboys</p>
+        {# 1. CONDITION : Gérer le cas "Aucun article" #}
+        {% if articles is empty %}
+            
+            <div style="text-align: center; padding: 2rem; background: #f8d7da; color: #721c24; border-radius: 10px;">
+                <h3>Oups ! 🌵</h3>
+                <p>Aucun article n'a été trouvé pour le moment. Revenez plus tard !</p>
+            </div>
+
+        {% else %}
+
+            <div class="portfolio-grid">
+                {% for article in articles %}
+                    <a href="#" style="text-decoration: none; color: inherit;">
+                        
+                        <div class="portfolio-card">
+                            <div class="portfolio-card-image" style="background-image: url('{{ article.image }}'); background-size: cover;">
+                                {# 2. CONDITION : Badge "Nouveau" (< 7 jours) #}
+                                {# On compare la date de l'article avec la date d'il y a 7 jours #}
+                                {% if article.publishedAt > date('-7 days') %}
+                                    <span style="position: absolute; top: 10px; right: 10px; background: #ff4757; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                                        Nouveau ✨
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <div class="portfolio-card-content">
+                                <h3 class="portfolio-card-title">{{ article.title }}</h3>
+                                <p class="portfolio-card-description">
+                                    {{ article.content|slice(0, 50) }}...
+                                </p>
+                                
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                    <span class="tag">Publié le {{ article.publishedAt|date('d/m/Y') }}</span>
+
+                                    {# 3. CONDITION : Bouton Admin #}
+                                    {% if isAdmin %}
+                                        <button class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: #2ed573;">
+                                            ✏️ Éditer
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                {% endfor %}
+            </div>
+
+        {% endif %}
+    </div>
 </div>
-
 {% endblock %}
