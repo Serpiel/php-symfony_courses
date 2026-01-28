@@ -3,39 +3,48 @@
 {% block title %}Article index{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
+    
+    <div class="example-wrapper">
+        <h1>Article index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>CreatedAt</th>
-                <th>Published</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.title }}</td>
-                <td>{{ article.content }}</td>
-                <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ article.published ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="portfolio-grid">
+            {% for article in articles %}
+                <div class="portfolio-card">
 
-    <a href="{{ path('app_article_new') }}">Create new</a>
+                    <div class="portfolio-card-image">
+                        {{ article.id }}
+                    </div>
+
+                    <div class="portfolio-card-content">
+                        <div class="portfolio-card-title">{{ article.title }}</div>
+                        
+                        <div class="portfolio-card-description">
+                            {{ article.content }}
+                        </div>
+
+                        <div class="portfolio-card-tags">
+                            <span class="tag">
+                                {{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}
+                            </span>
+                            <span class="tag">
+                                Published: {{ article.published ? 'Yes' : 'No' }}
+                            </span>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">show</a>
+                            <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">edit</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>no records found</p>
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <a href="{{ path('app_article_new') }}" class="btn">Create new</a>
+        </div>
+    </div>
+
 {% endblock %}
