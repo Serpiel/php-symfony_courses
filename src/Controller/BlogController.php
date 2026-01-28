@@ -26,16 +26,16 @@ final class BlogController extends AbstractController
             ],
             [
                 'id' => 2,
-                'title' => 'Maîtriser Twig',
-                'content' => 'Twig est un moteur de template puissant. Les conditions et les boucles n\'auront plus de secret pour vous.',
-                'image' => 'https://picsum.photos/seed/twig/400/250',
+                'title' => 'Le phénomène SERPIEL fait parler de lui',
+                'content' => 'Ce nouvel artiste qui est en roue libre',
+                'image' => 'images/SERPIEL_logo.png',
                 'publishedAt' => new \DateTime('-10 days'), // Vieux de 10 jours -> Pas de badge
             ],
             [
                 'id' => 3,
-                'title' => 'Le CSS moderne',
-                'content' => 'Flexbox et Grid ont changé la façon dont nous concevons les layouts sur le web. Fini les float !',
-                'image' => 'https://picsum.photos/seed/css/400/250',
+                'title' => 'A bas la ICE',
+                'content' => 'Les fascistes sont de retour',
+                'image' => 'https://media.cnn.com/api/v1/images/stellar/prod/ap25027710663013.jpg?c=16x9&q=h_833,w_1480,c_fill',
                 'publishedAt' => new \DateTime('-2 days'), // Vieux de 2 jours -> Devrait avoir le badge "Nouveau"
             ]
         ];
