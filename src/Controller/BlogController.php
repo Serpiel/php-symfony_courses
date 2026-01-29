@@ -15,7 +15,6 @@ final class BlogController extends AbstractController
         // Utile pour l'exercice "Bouton Admin"
         $isAdmin = true;
 
-        // 2. Simulation : Création de faux articles
         $articles = [
             [
                 'id' => 1,
