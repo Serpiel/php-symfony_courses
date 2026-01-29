@@ -45,6 +45,9 @@
         <div style="margin-top: 2rem;">
             <a href="{{ path('app_article_new') }}" class="btn">Create new</a>
         </div>
+        <div class="navigation d-flex justify-content-center">
+            {{ knp_pagination_render(articles) }}
+        </div>
     </div>
 
 {% endblock %}
