@@ -16,19 +16,24 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ArticleController extends AbstractController
 {
     #[Route(name: 'app_article_index', methods: ['GET'])]
+    #[Route(name: 'app_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        // 1. On crée une requête pour récupérer les articles du plus récent au plus vieux
-        // Note : On ne fait pas ->getResult() ici, on donne juste la "recette" (Query) au paginator
-        $query = $articleRepository->createQueryBuilder('a')
-            ->orderBy('a.createdAt', 'DESC')
-            ->getQuery();
+        // 1. On prépare les critères proprement
+        $criteria = [
+            'title'    => $request->query->get('q') ? trim($request->query->get('q')) : null,
+            'category' => $request->query->get('category'), // Pas besoin de trim si c'est un ID
+            'sort'     => $request->query->get('tri')       // On mappe 'tri' vers 'sort'
+        ];
 
-        // 2. On demande au Paginator de découper cette requête
+        // 2. On récupère la Query (La recette, pas encore les données !)
+        $queryBuilder = $articleRepository->search($criteria);
+
+        // 3. KnpPaginator gère la limite et l'offset SQL pour toi
         $articles = $paginator->paginate(
-            $query, // La requête brute
-            $request->query->getInt('page', 1), // Le numéro de page (1 par défaut)
-            10 // La limite : 10 articles par page
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            10
         );
 
         return $this->render('article/index.html.twig', [

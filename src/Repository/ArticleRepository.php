@@ -66,12 +66,51 @@ class ArticleRepository extends ServiceEntityRepository
     public function findByAuthor(int $userId): array
     {
         return $this->createQueryBuilder('a')
-            ->leftJoin('a.author', 'u')   // On joint la table User (alias u pour l'auteur)
-            ->addSelect('u')              // On récupère les infos de l'auteur direct
+            ->leftJoin('a.author', 'u')   
+            ->addSelect('u')              
             ->where('u.id = :id')
             ->setParameter('id', $userId)
             ->orderBy('a.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function search(array $criteria): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('a')
+            // --- OPTIMISATION N+1 ---
+            // On joint et sélectionne les données liées (Catégorie + Auteur)
+            // dès le début. Doctrine n'aura pas besoin de refaire des requêtes plus tard.
+            ->leftJoin('a.category', 'c')
+            ->addSelect('c')
+            ->leftJoin('a.author', 'u')
+            ->addSelect('u');
+
+        // 1. Recherche par Titre
+        if (!empty($criteria['title'])) {
+            $qb->andWhere('a.title LIKE :title')
+               ->setParameter('title', '%' . $criteria['title'] . '%');
+        }
+
+        // 2. Filtre par Catégorie
+        if (!empty($criteria['category'])) {
+            // Note : On utilise l'alias 'c' qui est déjà défini au tout début (ligne 7)
+            $qb->andWhere('c.id = :catId')
+               ->setParameter('catId', $criteria['category']);
+        }
+
+        // 3. LE TRI
+        $direction = 'DESC';
+        
+        // CORRECTION IMPORTANTE :
+        // Ton Controller envoie la clé 'sort' (regarde ton code précédent : 'sort' => $tri)
+        // Donc ici, on doit vérifier $criteria['sort'], et pas 'tri'.
+        if (isset($criteria['sort']) && strtoupper($criteria['sort']) === 'ASC') {
+            $direction = 'ASC';
+        }
+
+        $qb->orderBy('a.createdAt', $direction);
+
+        return $qb;
     }
 }

@@ -7,12 +7,39 @@
     <div class="example-wrapper">
         <h1>Article index</h1>
 
+        <div class="search-container mb-4" style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px;">
+            <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                
+                <div style="flex: 1;">
+                    <input type="text" name="q" value="{{ app.request.query.get('q') }}" 
+                    placeholder="Rechercher un article..." 
+                    class="form-control" 
+                    style="width: 100%; padding: 0.8rem; border-radius: 5px; border: none;">
+                </div>
+
+                <div>
+                    <select name="tri" class="form-select" style="padding: 0.8rem; border-radius: 5px; border: none; cursor: pointer;">
+                        <option value="DESC" {{ app.request.query.get('tri') == 'DESC' ? 'selected' : '' }}>Plus récent</option>
+                        <option value="ASC" {{ app.request.query.get('tri') == 'ASC' ? 'selected' : '' }}>Plus ancien</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">Filtrer</button>
+                
+                {% if app.request.query.get('q') or app.request.query.get('tri') %}
+                    <a href="{{ path('app_article_index') }}" style="color: #fff; text-decoration: underline;">Réinitialiser</a>
+                {% endif %}
+            </form>
+        </div>
+
         <div class="portfolio-grid">
             {% for article in articles %}
                 <div class="portfolio-card">
 
                     <div class="portfolio-card-image">
-                        {{ article.id }}
+                        {% if article.image %}
+                            <img src="{{ article.image }}">
+                        {% endif %}
                     </div>
 
                     <div class="portfolio-card-content">
